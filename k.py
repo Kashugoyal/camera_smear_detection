@@ -29,8 +29,8 @@ def average_images(path,n):
     if i<n:
       # avg = cv2.add(cv2.imread(image_path,1)/n , avg)
       img = cv2.imread(image_path,0)
-      blur = cv2.GaussianBlur(img, (5,5),0)
-      cv2.accumulateWeighted(blur,avg,0.01)
+      blur = cv2.blur(img, (5,5),0)
+      cv2.accumulateWeighted(img,avg,0.01)
       res1 = cv2.convertScaleAbs(avg)
     else:
       break
@@ -45,14 +45,14 @@ def display(obj):
   # cv2.imshow("image", cv2.subtract(images[49],images[48]))
   cv2.imshow('image', obj)
   cv2.waitKey(0)                   # Wait for a keystroke in the window
-  cv2.destroyAllWindows()
+  # cv2.destroyAllWindows()
 
 
 def main():
 
   # path = '/home/suhailps/Documents/Assignments/Spring_18/Geospatial/Assignment1/sample_drive/cam_0'
   # Please add the images files
-  path = '/home/kashish/Downloads/sample_drive/cam_3'
+  path = '/home/kashish/Downloads/sample_drive/cam_1'
   num_images = len(glob.glob(path + "/*.jpg"))*1.0
   read_images(path)
 
@@ -64,6 +64,14 @@ def main():
   # laplacian = cv2.Laplacian(avg1,cv2.CV_64F)
   # avg2 = average_images(path,110)
   display(avg1)
+  avg1 = cv2.GaussianBlur(avg1, (7,7),0)
+  display(avg1)
+  ret,th1 = cv2.threshold(avg1,100,255,cv2.THRESH_BINARY)
+  # th1 = cv2.threshold(avg1, 130,255,cv2.THRESH_BINARY)
+
+  display(th1)
+  display(cv2.Canny(th1,100,200))
+
   # display(res1)
   # display(laplacian*100)
   # display(avg2)
