@@ -10,7 +10,7 @@ def read_images(path):
 
   i=0 #testing
   for image_path in glob.glob(path + '/*.jpg'):
-    images.append(cv2.imread(image_path,1))
+    images.append(cv2.imread(image_path,0))
     # print(image_path)
     #testing... limitting the number of input images
     i+=1
@@ -23,17 +23,19 @@ def average_images(path,n):
 
   avg = np.zeros(images[0].shape,np.float)     #float for accumulated function, uint8 for normal addition
   i =0
-  print images[1].dtype, avg.dtype, 1/100
+  print images[1].dtype, avg.dtype, 1/100.0, n, 1/n
   for image_path in glob.glob(path + '/*.jpg'):
   # for image in images:
     if i<n:
       # avg = cv2.add(cv2.imread(image_path,1)/n , avg)
-      cv2.accumulateWeighted(cv2.imread(image_path,1),avg,0.000001)
+      img = cv2.imread(image_path,0)
+      blur = cv2.GaussianBlur(img, (5,5),0)
+      cv2.accumulateWeighted(blur,avg,0.01)
+      res1 = cv2.convertScaleAbs(avg)
     else:
       break
-    # print 'doing'
     i+=1
-  return avg
+  return res1
 
 
 def display(obj):
@@ -50,19 +52,25 @@ def main():
 
   # path = '/home/suhailps/Documents/Assignments/Spring_18/Geospatial/Assignment1/sample_drive/cam_0'
   # Please add the images files
-  path = '/home/kashish/Downloads/sample_drive/cam_1'
-  num_images = len(glob.glob(path + "/*.jpg"))
+  path = '/home/kashish/Downloads/sample_drive/cam_3'
+  num_images = len(glob.glob(path + "/*.jpg"))*1.0
   read_images(path)
 
   # avg = np.zeros(images[0].shape,np.float)     #float for accumulated function, uint8 for normal addition
 
   # cv2.accumulate(images[1]/100, avg)
-  avg1 = average_images(path,3000)
+  avg1 = average_images(path,500.0)
+  # res1 = cv2.convertScaleAbs(avg1)
+  # laplacian = cv2.Laplacian(avg1,cv2.CV_64F)
   # avg2 = average_images(path,110)
   display(avg1)
+  # display(res1)
+  # display(laplacian*100)
   # display(avg2)
   # display(cv2.subtract(avg2, avg1))
-  # display(cv2.absdiff(avg2 , avg1))
+  # display(cv2.absdiff(images[2] , images[1]))
+  # display(cv2.absdiff(images[3] , images[2]))
+
 
   # display(cv2.subtract(images[5],images[4]))
   # display(cv2.subtract(images[7],images[6]))
