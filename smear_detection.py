@@ -25,17 +25,58 @@ def average_images(path,n):
 
   return res
 
+def subtract(path,n):
+
+  first_img=cv2.imread(glob.glob(path + '/*.jpg')[0],0)
+  avg =np.zeros(first_img.shape,np.float)     #float for accumulated function, uint8 for normal addition
+  diff =np.zeros(first_img.shape,np.float)
+  sum =np.zeros(first_img.shape,np.float)
+  i =0
+
+  for image_path in glob.glob(path + '/*.jpg'):
+    print i#For getting the status in terminal
+
+    if i%2==0:
+        img1 =  cv2.imread(image_path,0)
+    else:
+        img2 =  cv2.imread(image_path,0)
+
+        diff=cv2.subtract(img1,img2)
+        if i==1:
+            sum=diff*0.00001
+        # display(diff,'difference')
+
+    cv2.accumulateWeighted(diff,avg,0.01)
+    res = cv2.convertScaleAbs(avg)
+    if i>1:
+        sum=cv2.add(sum,diff*0.00001)
+
+    display(sum,'sum')
+    cv2.imwrite('output2.jpg',res)
+
+    i=i+1
+    #For testing
+    # if i>500:
+    #     break
+
+
+  display(res,'Average')
+
+  cv2.imwrite('output2.jpg',res)
+  return res
+
 #Fucntion to display an image
 def display(image,window_name):
 
   cv2.namedWindow(window_name,cv2.WINDOW_NORMAL)
   cv2.resizeWindow(window_name, 600,600)
   cv2.imshow(window_name, image)
-  cv2.waitKey(0)                   # Wait for a keystroke in the window
+  cv2.waitKey(10)                   # Wait for a keystroke in the window
   # cv2.destroyAllWindows()
 
 def main():
     arguments = sys.argv[1:]
+
 
 
     #Checking if pathis entered
@@ -49,6 +90,13 @@ def main():
 
     #Number of images in the folder
     n_of_images=glob.glob(path + '/*.jpg')
+
+
+    #New approach
+    # subtract(path,n_of_images)
+
+    # sys.exit(1)
+    #New approach
 
     #Finding the average image and
     avg_image=average_images(path,n_of_images)
@@ -65,15 +113,6 @@ def main():
     ret,th1 = cv2.threshold(cl1, 50,255,cv2.THRESH_BINARY)
     display(th1,'Threshold img')
 
-    # #Adaptive Threshold
-    # th2 = cv2.adaptiveThreshold(cl1,255,cv2.ADAPTIVE_THRESH_MEAN_C,\
-    #             cv2.THRESH_BINARY,11,2)
-    # display(th1,'Threshold imean')
-
-    # th3 = cv2.adaptiveThreshold(cl1,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
-    #             cv2.THRESH_BINARY,11,2)
-    # display(th1,'Threshold Guass')
-
 
     image, contours, hier = cv2.findContours(th1, cv2.RETR_TREE,
                     cv2.CHAIN_APPROX_SIMPLE)
@@ -81,23 +120,25 @@ def main():
     cv2.drawContours(image, contours, -1, (255,0,0), 10)
     display(image,'Contours')
 
-    # # with each contour, draw boundingRect in green
-    # # a minAreaRect in red and
-    # # a minEnclosingCircle in blue
-    # for c in contours:
-    #     # get the bounding rect
-    #     x, y, w, h = cv2.boundingRect(c)
-    #     # draw a green rectangle to visualize the bounding rect
-    #     if x!=0 and y!=0:
-    #         cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    print 'Number of contours= ',len(contours)
 
-    #         # get the min area rect
-    #         rect = cv2.minAreaRect(c)
-    #         box = cv2.boxPoints(rect)
-    #         # convert all coordinates floating point values to int
-    #         box = np.int0(box)
-    #         # draw a red 'nghien' rectangle
-    #         # cv2.drawContours(img, [box], 0, (0, 0, 255))
+    # with each contour, draw boundingRect in green
+    # a minAreaRect in red and
+    # a minEnclosingCircle in blue
+    for c in contours:
+        # get the bounding rect
+        x, y, w, h = cv2.boundingRect(c)
+        # draw a green rectangle to visualize the bounding rect
+        if x!=0 and y!=0:
+            cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+            # get the min area rect
+            rect = cv2.minAreaRect(c)
+            box = cv2.boxPoints(rect)
+            # convert all coordinates floating point values to int
+            box = np.int0(box)
+            # draw a red 'nghien' rectangle
+            cv2.drawContours(img, [box], 0, (0, 0, 255))
 
 
     #     else:
