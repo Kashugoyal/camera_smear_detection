@@ -28,15 +28,16 @@ def average_images(path,n):
   # for image in images:
     if i<n:
       # avg = cv2.add(cv2.imread(image_path,1)/n , avg)
-      img = 255 - cv2.imread(image_path,0)
-      # img = cv2.imread(image_path,0)
+      # img = 255 - cv2.imread(image_path,0)
+      img = cv2.imread(image_path,0)
+      cv2.normalize(img, img, 0, 255, cv2.NORM_MINMAX)
+      # display(img)
       blur = cv2.blur(img, (5,5),0)
       print i
-      if np.sum(img)<507000000 and np.sum(img)>410000000:
-        cv2.accumulateWeighted(img,avg,0.01)
-        res1 = cv2.convertScaleAbs(avg)
+      # if np.sum(img)<507000000 and np.sum(img)>410000000:
+      cv2.accumulateWeighted(img,avg,0.01)
+      res1 = cv2.convertScaleAbs(avg)
         # print np.sum(img)
-        # display(img)
     else:
       break
     i+=1
@@ -72,7 +73,7 @@ def main():
 
   # path = '/home/suhailps/Documents/Assignments/Spring_18/Geospatial/Assignment1/sample_drive/cam_0'
   # Please add the images files
-  path = '/home/kashish/Downloads/sample_drive/cam_5'
+  path = '/home/kashish/Downloads/sample_drive/cam_1'
   num_images = len(glob.glob(path + "/*.jpg"))*1.0
   read_images(path)
 
