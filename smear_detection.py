@@ -95,7 +95,7 @@ def threshold(path):
         display(img, 'clahe')
         # img = cv2.erode(img,kernel,iterations = 1)
         img = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,0)
-        kernel = np.ones((9,9),np.uint8)
+        kernel = np.ones((3,3),np.uint8)
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
         # gaussian = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,51,0)
         display(img,'mean')
