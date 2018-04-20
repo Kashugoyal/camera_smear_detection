@@ -3,6 +3,8 @@ import numpy as np
 import cv2
 import glob
 import sys
+import scipy.ndimage as scpy
+from skimage.filter import threshold_adaptive
 
 #function to find the Average image
 def average_images(path,n):
