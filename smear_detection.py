@@ -106,6 +106,61 @@ def threshold(path):
 
 
 
+def threshold2(path):
+    i=0
+    for image_path in glob.glob(path + '/*.png'):
+        print i, image_path
+        img = cv2.imread(image_path,0)
+
+        gaussian_image = scpy.gaussian_filter(img, (10,10))
+        display(gaussian_image,'gaussian_image')
+
+        threshold_image = threshold_adaptive(gaussian_image, 255, offset = 10)
+        threshold_average_image = threshold_image.astype(np.uint8) * 255
+        display(threshold_average_image,'threshold_average_image')
+
+
+        edge_detection_image = cv2.Canny(threshold_average_image, 200, 200)
+        display(edge_detection_image,'edge_detection_image')
+
+        (_,cnts,_) = cv2.findContours(edge_detection_image, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+
+        cv2.drawContours(img,cnts,-1,(0,0,255),2)
+        display(img,'final')
+        # ret,th1 = cv2.threshold(img,180,255,cv2.THRESH_BINARY)
+        # display(edge_detection_image,'edge_detection_image')
+        # median = cv2.medianBlur(gaussian,9)
+        # edged = cv2.Canny(median, 30, 200)
+
+        # image, contours, hier = cv2.findContours(median, cv2.RETR_TREE,
+        #                 cv2.CHAIN_APPROX_SIMPLE)
+
+        # print 'Contours=', len(contours)
+
+        # # display(gaussian,'gaussian')
+        # # display(median,'blur')
+        # # display(edged,'edged')
+        # # display(image,'image')
+
+
+
+        # for cnt in contours:
+        #     print  'here'
+        #     epsilon = 0.1*cv2.arcLength(cnt,True)
+        #     approx = cv2.approxPolyDP(cnt,epsilon,True)
+        #     print  'here2'
+        #     M = cv2.moments(approx)
+        #     # print( M )
+        #     area = cv2.contourArea(approx)
+        #     if area>500 :#and area <22000:
+        #         print 'area= ',area
+        #         mask = np.zeros(image.shape, dtype = "uint8")
+        #         cv2.drawContours(img, approx, -1, (255, 0, 0), -1)
+        #         display(img,'mask')
+        # display(mean, 'mean')
+        # display(gaussian,'gaussian')
+        cv2.destroyAllWindows()
+        i+=1
 
 
 
