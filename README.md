@@ -3,7 +3,7 @@
 ---
 ### Contributors:
 
-* Alexis Bourdon
+* [Alexis Baudron](https://github.com/alexisbdr)
 * [Kashish Goyal](https://github.com/Kashugoyal)
 * Suhail Pallath Sulaiman
 
