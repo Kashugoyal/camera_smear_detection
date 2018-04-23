@@ -63,13 +63,15 @@ Clone the repository one level above the sequence folders. A sample tree has bee
    * Area based filter helps in removing false positives like the sky and the road which show up in the average.
    * A mask is generated and is saved in the working directory.
 
+<img src="https://github.com/Kashugoyal/camera_smear_detection/blob/master/images/1.png?raw=true" width=100% align="center" >
+
+
 ### Output 
 The output of the program is mask of the detected smear. This mask is saved as a `.jpg` file in the current working directory. The average image obtained from the sequence is also saved and can be used directly to save time when adjusting the parameters for post processing the average image.
 Sample average images and their masks have been included in the repository.
 
 > Parameters for operations such as Gaussian Blur, CLAHE, and Adaptive Binarization need to be reconfigured for optimal results of new sequences.
 
-<img src='https://gthub.com/Kashugoyal/camera_smear_detection/blob/master/images/1.png?raw=true' width=100% />
 
 ### Reflections
 * A general approach did not provide a good output for all the cameras
