@@ -94,8 +94,8 @@ def threshold(image):
     for cnt in contours:
 
         area = cv2.contourArea(cnt)
-        if area>6000 and area<25000:  #cam1
-        # if area>25000 and area<26000:  #cam3
+        # if area>6000 and area<25000:  #cam1
+        if area>25000 and area<26000:  #cam3
         # if area>6800 and area<7000:  #cam5
         # if area>6800 and area<7000:  #cam0,2
             print 'area=',area
@@ -120,7 +120,7 @@ def main():
 
     #Checking if path is entered
     if len(sys.argv) < 2:
-        path = '/home/kashish/Downloads/sample_drive/cam_1'
+        path = '/home/kashish/Downloads/sample_drive/cam_3'
         print 'No path given, using defaut path'
 
     else:
@@ -131,8 +131,8 @@ def main():
 
     #New approach
     avg_image = find_average(path,n_of_images)
-
-    # un-comment the followung line to just see the post processing on average images in the direcotry
+    #comment the above line and 
+    # un-comment the following line to just see the post processing on average images in the direcotry
     # avg_image =cv2.imread('cam1.png',0)
     display(avg_image,'input',0)
 
