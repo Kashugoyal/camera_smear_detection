@@ -3,6 +3,8 @@ import numpy as np
 import cv2
 import glob
 import sys
+import scipy.ndimage as scpy
+from skimage.filter import threshold_adaptive
 
 #function to find the Average image
 def average_images(path,n):
@@ -24,6 +26,14 @@ def average_images(path,n):
     if i>500:
         break
   return res
+
+def path_array(path):
+
+  i = []
+  for image_path in glob.glob(path + '/*.jpg'):
+    i.append(image_path)
+  i.sort()
+  return i
 
 
 
@@ -65,6 +75,37 @@ def subtract(path,n):
 
 
 
+def subtract_new(path,n,paths):
+
+    first_img=cv2.imread(glob.glob(path + '/*.jpg')[0],0)
+    avg =np.zeros(first_img.shape,np.float)     #float for accumulated function, uint8 for normal addition
+    diff =np.zeros(first_img.shape,np.float)
+    sum =np.zeros(first_img.shape,np.float)
+    i =0
+
+    for image_path in paths:
+        print i       #For getting the status in terminal
+
+        if i%2==0:
+            img1 =  cv2.imread(image_path,0)
+        else:
+            img2 =  cv2.imread(image_path,0)
+
+            diff=cv2.subtract(img1,img2)
+            if i==1:
+                sum=diff*0.00001
+            # display(diff,'difference')
+
+        # cv2.accumulateWeighted(diff,avg,0.01)
+        # res = cv2.convertScaleAbs(avg)
+        if i>1:
+            sum=cv2.add(sum,diff*0.00001)
+
+        display(sum,'res')
+        i+=1
+    cv2.imwrite('output2.jpg',sum)
+    return sum
+
 
 
 
@@ -76,7 +117,7 @@ def display(image,window_name):
   cv2.namedWindow(window_name,cv2.WINDOW_NORMAL)
   cv2.resizeWindow(window_name, 600,600)
   cv2.imshow(window_name, image)
-  cv2.waitKey(0)                   # Wait for a keystroke in the window
+  cv2.waitKey(10)                   # Wait for a keystroke in the window
   # cv2.destroyAllWindows()
 
 
@@ -124,8 +165,9 @@ def threshold2(path):
         display(edge_detection_image,'edge_detection_image')
 
         (_,cnts,_) = cv2.findContours(edge_detection_image, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
-        cv2.drawContours(img,cnts,-1,(0,0,255),2)
+        cv2.drawContours(img,cnts,-1, (0,255,0) ,6)
         display(img,'final')
         # ret,th1 = cv2.threshold(img,180,255,cv2.THRESH_BINARY)
         # display(edge_detection_image,'edge_detection_image')
@@ -178,7 +220,13 @@ def main():
     #Number of images in the folder
     n_of_images=glob.glob(path + '/*.jpg')
 
-    threshold(path)
+    # threshold2(path)
+    paths = path_array(path)
+    sum = subtract_new(path, n_of_images,paths)
+    cv2.imwrite('new_cam5.png',sum)
+    cv2.imshow('sum', sum)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
     sys.exit(0)
 
 
