@@ -69,6 +69,8 @@ Sample average images and their masks have been included in the repository.
 
 > Parameters for operations such as Gaussian Blur, CLAHE, and Adaptive Binarization need to be reconfigured for optimal results of new sequences.
 
+<img src='https://gthub.com/Kashugoyal/camera_smear_detection/blob/master/images/1.png?raw=true' width=100% />
+
 ### Reflections
 * A general approach did not provide a good output for all the cameras
 * Custom filter parameters had to be given for each camera to filter out the smear more accurately.
